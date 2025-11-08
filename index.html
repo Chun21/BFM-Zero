@@ -4379,7 +4379,7 @@
       <div style="margin: 10px 0; padding-left: 60px;">
         <ol style="text-align: left; max-width: 100%; margin: 0 auto; font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif); font-size: clamp(0.75em, 1.2vw, 0.95em); line-height: 2.0; padding-left: 0; padding-right: 35px;">
           <li style="margin-bottom: 20px; padding-left: 15px; word-wrap: break-word; overflow-wrap: break-word;">Starting from $\{s,a\}$ and follow $\pi_z$, the visitation probability of $s'$ is approximately <span style="color: #004bb3; font-weight: bold;">$\boldsymbol{F}(s, a, z)^\top$</span><span style="color: #3a6902; font-weight: bold;">$\boldsymbol{B}(s')$</span>.</li>
-          <li style="margin-bottom: 20px; padding-left: 15px; word-wrap: break-word; overflow-wrap: break-word;">The Q-function of $\pi_z$ is given by <span style="color: #004bb3; font-weight: bold;">$\boldsymbol{F}^\top $</span>$z$ but not learned with supervision from any specific rewards.</li>
+          <li style="margin-bottom: 20px; padding-left: 15px; word-wrap: break-word; overflow-wrap: break-word;">The Q-function of $\pi_z$ is given by <span style="color: #004bb3; font-weight: bold;">$\boldsymbol{F}^\top $</span>$z$ but not learned with supervision from any task-related rewards.</li>
           <li style="margin-bottom: 20px; padding-left: 15px; word-wrap: break-word; overflow-wrap: break-word;">In inference time, for various objectives (goal reaching, tracking, reward optimization), we can use following fomulas to compute $z$ in a <strong style="color: #b63620;">zero-shot</strong> way:</li>
         </ol>
   </div>
@@ -4763,7 +4763,7 @@
 
   <div class="container" style="max-width: 75%; margin: 0 auto; background: #f0f2f8; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
       
-   <h4 style="text-align: center; margin-bottom: 15px; font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif); font-size: 0.95em;">We do not have <span style="color: #004bb3; font-weight: bold;">any labeled rewards</span> in training. The reward inference (optimization) happens in the test time. Users can <span style="color: #004bb3; font-weight: bold;">prompt in any type of reward function</span> w.r.t. the robot states, and the policy <span style="color: #004bb3; font-weight: bold;">zero-shot</span> output the optimized skills without retraining. ($R$ below is the rewards.)</h4>
+   <h4 style="text-align: center; margin-bottom: 15px; font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif); font-size: 0.95em;">We do not have <span style="color: #004bb3; font-weight: bold;">any labeled(task-related) rewards</span> in training. The reward inference (optimization) happens in the test time. Users can <span style="color: #004bb3; font-weight: bold;">prompt in any type of reward function</span> w.r.t. the robot states, and the policy <span style="color: #004bb3; font-weight: bold;">zero-shot</span> output the optimized skills without retraining. ($R$ below is the rewards.)</h4>
     <div class="tabs-container" style="max-width: 100%;">
       <div class="tabs-header">
         <button class="tab-button active" onclick="showTab('basic-locomotion')">Basic Locomotion</button>
