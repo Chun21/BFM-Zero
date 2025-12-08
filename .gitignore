@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data files
+# *.npy
+# *.pkl
+# *.pth
+# *.pt
+# *.h5
+# *.hdf5
+
+# Model files
+# *.safetensors
+# *.onnx
+# *.pb
+
+# Logs
+*.log
+MUJOCO_LOG.TXT
+
+# Videos
+*.mp4
+*.avi
+*.mov
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large data directories (uncomment if needed)
+# metamotivo-aux/
+# videos/
+# static/
+model/
+videos/
+
