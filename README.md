@@ -278,13 +278,26 @@ source ~/.bashrc
 ## 👥 Citation
 
 If you find this project useful in your research, please consider citing:
-
+<!--
 ```bibtext
 @article{li2025bfmzero,
   title   = {BFM-Zero: A Promptable Behavioral Foundation Model for Humanoid Control Using Unsupervised Reinforcement Learning},
   author  = {Yitang Li and Zhengyi Luo and Tonghe Zhang and Cunxi Dai and Anssi Kanervisto and Andrea Tirinzoni and Haoyang Weng and Kris Kitani and Mateusz Guzek and Ahmed Touati and Alessandro Lazaric and Matteo Pirotta and Guanya Shi},
   journal = {arXiv preprint arXiv:2505.06776},
   year    = {2025}
+}
+```
+-->
+
+```bibtex
+@misc{li2025bfmzeropromptablebehavioralfoundation,
+      title={BFM-Zero: A Promptable Behavioral Foundation Model for Humanoid Control Using Unsupervised Reinforcement Learning}, 
+      author={Yitang Li and Zhengyi Luo and Tonghe Zhang and Cunxi Dai and Anssi Kanervisto and Andrea Tirinzoni and Haoyang Weng and Kris Kitani and Mateusz Guzek and Ahmed Touati and Alessandro Lazaric and Matteo Pirotta and Guanya Shi},
+      year={2025},
+      eprint={2511.04131},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2511.04131}, 
 }
 ```
 
