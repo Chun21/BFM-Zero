@@ -1,6 +1,6 @@
 
 POLICY_CONFIG=config/policy/motivo_newG1.yaml # use the old version without damping arms
-MODEL_ONNX_PATH=./model/model_example/exported/FBcprAuxModel.onnx
+MODEL_ONNX_PATH=./model/exported/FBcprAuxModel.onnx
 TASK=config/exp/reward/locomotion.yaml
 
 python rl_policy/bfm_zero.py \
