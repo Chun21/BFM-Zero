@@ -11,7 +11,7 @@
 
 </div>
 
-# BFM-Zero Deployment Stack
+# BFM-Zero Deployment Stack 
 
 > **Deployment stack for BFM-Zero on the Unitree G1 (Jetson Orin)**
 
@@ -37,18 +37,30 @@ This repository provides a complete deployment solution for running BFM-Zero pol
 
 2. **Install Python dependencies**:
    ```bash
-   cd motivo_isaac_deploy
+   cd BFM-Zero
    pip install -r requirements.txt
    ```
 
-### Downloading the Motivo / BFM-Zero ONNX Model
+### Downloading the BFM-Zero ONNX Model
+
+run
+```bash
+python download_hf_model.py --token <YOUR_HF_TOKEN>
+```
+
+You can either pass your Hugging Face token as a flag (as above), or set it via the `HF_TOKEN` environment variable:
+
+```bash
+export HF_TOKEN=your_token_here
+python download_hf_model.py
+```
 
 After downloading the model, your directory structure should look like this:
 
 ```
 model/
 ├── exported/
-│   └── model.onnx              # ONNX policy model
+│   └── *.onnx              # ONNX policy model
 ├── tracking_inference/
 │   └── *.pkl                   # Latent variables for tracking tasks
 ├── reward_inference/
@@ -102,7 +114,7 @@ In a **separate terminal**, activate the environment and navigate to the project
 
 ```bash
 conda activate bfm0real
-cd motivo_isaac_deploy
+cd BFM-Zero
 ```
 
 **Run the policy:**
@@ -153,9 +165,9 @@ We provide three types of tasks: `tracking`, `reward inference`, and `goal reach
 
 > **💡 Tip:** If you generate latent z with discounted window, set `window_size` to `1`.
 
-**Example Result:**
+<!-- **Example Result:**
 
-<video src="examples/tracking.mov" controls width="600"></video>
+<video src="examples/tracking.mov" controls width="600"></video> -->
 
 ---
 
@@ -183,9 +195,9 @@ selected_rewards_filter_z:
 
 Each entry selects specific z latent variables (different subsampled buffers are used to infer different zs) for a given reward.
 
-**Example Result:**
+<!-- **Example Result:**
 
-<video src="examples/rewards.mov" controls width="600"></video>
+<video src="examples/rewards.mov" controls width="600"></video> -->
 
 ---
 
@@ -211,25 +223,51 @@ selected_goals: [
 ]
 ```
 
-**Example Result:**
+<!-- **Example Result:**
 
-<video src="examples/goal.mov" controls width="600"></video>
+<video src="examples/goal.mov" controls width="600"></video> -->
 
 ---
 
 ## 🤖 On-Robot Deployment (Jetson Orin, Unitree G1)
 
+### ‼️Alert & Disclaimer
+Deploying these models on physical hardware can be hazardous. Unless you have deep sim‑to‑real expertise and robust safety protocols, we strongly advise against running the model on real robots. These models are supplied for research use only, and we disclaim all responsibility for any harm, loss, or malfunction arising from their deployment.
+
 ### Required Setup
 - Target platform: onboard Orin Jetson of the Unitree G1 (ssh into the robot and copy this codebase).
 - Install the Unitree C++ SDK Python binding from https://github.com/EGalahad/unitree_sdk2 to enable 50 Hz control. Update the import path in `rl_policy/base_policy.py` after building the binding.
 
+**Build the SDK with CMake**
+```
+git clone https://github.com/EGalahad/unitree_sdk2.git
+sudo apt-get update
+sudo apt-get install build-essential cmake python3-dev python3-pip
+pip3 install pybind11 pybind11-stubgen numpy
+cd ./unitree_sdk2
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release .. 
+make -j$(nproc)
+```
+
+
+```
+git clone https://github.com/eclipse-cyclonedds/cyclonedds -b releases/0.10.x
+cd cyclonedds && mkdir build install && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=../install
+cmake --build . --target install
+cd ~/unitree_sdk2_python
+echo "export CYCLONEDDS_HOME=/home/<username>/cyclonedds/install">>~/.bashrc.
+source ~/.bashrc
+```
 
 ### Running on the Real Robot
 - Replace `"<your-unitree-sdk2-path>"` in `./rl_policy/bfm_zero.py`
 - Use the real-robot config: `config/robot/g1_real.yaml`. 
 
   (i.e. `python rl_policy/bfm_zero.py \
-    --robot_config config/robot/g1.yaml \
+    --robot_config config/robot/g1_real.yaml \
     --policy_config ${POLICY_CONFIG} \
     --model_path ${MODEL_ONNX_PATH} \
     --task  ${TASK}`)

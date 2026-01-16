@@ -280,21 +280,20 @@ class BFMZeroPolicy:
             reset_callback()
 
     def update(self):
+        self.state_dict["action"] = self.last_action
         for update_callback in self.update_callbacks:
             update_callback(self.state_dict)
 
     def prepare_obs_for_rl(self):
         """Prepare observation for policy inference using observation classes"""
         obs_dict: Dict[str, np.ndarray] = {}
+        self.update()
+        
         for obs_group in self.observations.values():
             obs = obs_group.compute()
             obs_dict[obs_group.name] = obs[None, :].astype(np.float32)
         
         obs = obs_dict[obs_group.name]
-
-        self.state_dict["action"] = self.last_action
-
-        self.update()
 
         if self.task_type == "tracking":
             window = self.ctx[self.t:self.t+self.window_size]  # 
@@ -657,4 +656,3 @@ if __name__ == "__main__":
         rl_rate=50,
     )
     policy.run()
-
