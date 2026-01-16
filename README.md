@@ -54,7 +54,25 @@ pip install -r requirements.txt
    ```
 
 2. **Download the model**:
-   [TODO]
+      run
+   ```bash
+   python download_hf_model.py --token <YOUR_HF_TOKEN>
+   ```
+
+   You can either pass your Hugging Face token as a flag (as above), or set it via the `HF_TOKEN` environment variable:
+
+   ```bash
+   export HF_TOKEN=your_token_here
+   python download_hf_model.py
+   ```
+   After downloading the model, your directory structure should look like this:
+
+   ```
+   model/
+   ├── checkpoint/
+       └── model/   
+       └── buffer/             
+   ```
 
 3. **Follow the notebook `inference_tutorial.ipynb`** to learn about:
    - Loading BFM-Zero models
@@ -68,7 +86,7 @@ pip install -r requirements.txt
 minimal_model_inference_code/
 ├── README.md                          # This file
 ├── requirements.txt                   # Python dependencies
-├── inference_tutorial.ipynb             # Main tutorial notebook
+├── inference_tutorial.ipynb           # Main tutorial notebook
 ├── env.py                             # MuJoCo environment wrapper
 ├── common.py                          # Configuration constants
 ├── sample_data.npz                    # Sample motion data
@@ -85,12 +103,11 @@ minimal_model_inference_code/
 │   ├── normalizers.py                 # Observation normalizers
 │   └── g1_for_reward_inference.xml    # MuJoCo robot model
 ├── model/                             # Pre-trained model checkpoints
-│   └── oct7_base/
-│       └── checkpoint/                # Model weights and configs
-|           └── model/                 
-|              └── model.safetensors
-|              └── config.json
-|              └── init_kwargs.json
+│   └── checkpoint/                    # Model weights and configs
+|        └── model/                 
+|           └── model.safetensors
+|           └── config.json
+|           └── init_kwargs.json
 └── videos/                            # Generated simulation videos
 ```
 

@@ -164,7 +164,7 @@ class MJWLocomotionReward(RewardFunction):
 
 
 class MJWRotationReward(RewardFunction):
-    axis: str = "x"
+    axis: str = "z"
     target_ang_velocity: float = 5.0
     # Note: pelvis height is 0.8 exactly after reset with default pose
     stand_pelvis_height: float = 0.8
@@ -308,7 +308,7 @@ class MJWArmsReward(RewardFunction):
 
 
 class MJWMoveArmsReward(MJWLocomotionReward):
-    move_speed: float = 5
+    move_speed: float = 1
     # Head height of G1 robot after "Default" reset is 1.22
     stand_height: float = 0.5
     move_angle: float = 0
