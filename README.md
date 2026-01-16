@@ -232,7 +232,7 @@ selected_goals: [
 ## 🤖 On-Robot Deployment (Jetson Orin, Unitree G1)
 
 ### ‼️Alert & Disclaimer
-Deploying these models on physical hardware can be hazardous. Unless you have deep sim‑to‑real expertise and robust safety protocols, we strongly advise against running the model on real robots. These models are supplied for research use only, and we disclaim all responsibility for any harm, loss, or malfunction arising from their deployment.
+Deploying these models on physical hardware can be hazardous, and these models can ONLY BE DEPLOYED ON G1 Type 10, 11, 12, 15, or 16. Unless you have deep sim‑to‑real expertise and robust safety protocols, we strongly advise against running the model on real robots. These models are supplied for research use only, and we disclaim all responsibility for any harm, loss, or malfunction arising from their deployment.
 
 ### Required Setup
 - Target platform: onboard Orin Jetson of the Unitree G1 (ssh into the robot and copy this codebase).
