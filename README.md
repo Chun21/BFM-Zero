@@ -247,7 +247,7 @@ pip3 install pybind11 pybind11-stubgen numpy
 cd ./unitree_sdk2
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release .. 
+cmake -DCMAKE_BUILD_TYPE=Release -Dpybind11_DIR=<your-pybind11-path> # `python3 -m pybind11 --cmakedir` to see the path
 make -j$(nproc)
 ```
 
@@ -258,7 +258,7 @@ cd cyclonedds && mkdir build install && cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=../install
 cmake --build . --target install
 cd ~/unitree_sdk2_python
-echo "export CYCLONEDDS_HOME=/home/<username>/cyclonedds/install">>~/.bashrc.
+echo "export CYCLONEDDS_HOME=/home/<username>/cyclonedds/install">>~/.bashrc. # if your cyclonedds is not in root directory, change this path accordingly
 source ~/.bashrc
 ```
 
