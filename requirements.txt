@@ -11,7 +11,4 @@ sshkeyboard
 pygame
 zmq
 joblib
-pyvicon-datastream
 huggingface-hub
-# unitree_sdk2py
-# git+https://github.com/unitree-ai/unitree_sdk2py.git
