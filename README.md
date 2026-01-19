@@ -279,7 +279,7 @@ source ~/.bashrc
 ### Known Issues
 - If you encounter an error stating that `eth0` is not a valid network interface, update the interface name in the file ['./config/robot/g1_real.yaml'](config/robot/g1_real.yaml) to match your robot’s actual network interface (e.g., `eth1`).
 
-
+- If you encounter severe jittering / non-stable performance on the real robot, please ensure you are using full GPU for inference and that there are no network issues, so the inference latency stays around 4–5 ms, and that your robot is type 10, 11, 12, 15, or 16 with the hip pitch motor N7520-22.5.
 
 ## 👥 Citation
 
