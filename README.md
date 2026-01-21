@@ -239,7 +239,7 @@ Deploying these models on physical hardware can be hazardous, and these models c
 - Install the Unitree C++ SDK Python binding from https://github.com/EGalahad/unitree_sdk2 to enable 50 Hz control. Update the import path in `rl_policy/base_policy.py` after building the binding.
 
 **Build the SDK with CMake**
-```
+```bash
 git clone https://github.com/EGalahad/unitree_sdk2.git
 sudo apt-get update
 sudo apt-get install build-essential cmake python3-dev python3-pip
@@ -247,44 +247,63 @@ pip3 install pybind11 pybind11-stubgen numpy
 cd ./unitree_sdk2
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release .. 
+cmake -DCMAKE_BUILD_TYPE=Release -Dpybind11_DIR=<your-pybind11-path> # `python3 -m pybind11 --cmakedir` to see the path
 make -j$(nproc)
 ```
 
 
-```
+```bash
 git clone https://github.com/eclipse-cyclonedds/cyclonedds -b releases/0.10.x
 cd cyclonedds && mkdir build install && cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=../install
 cmake --build . --target install
-cd ~/unitree_sdk2_python
-echo "export CYCLONEDDS_HOME=/home/<username>/cyclonedds/install">>~/.bashrc.
+echo "export CYCLONEDDS_HOME=/home/<username>/cyclonedds/install">>~/.bashrc. # if your cyclonedds is not in root directory, change this path accordingly
 source ~/.bashrc
 ```
 
 ### Running on the Real Robot
-- Replace `"<your-unitree-sdk2-path>"` in `./rl_policy/bfm_zero.py`
-- Use the real-robot config: `config/robot/g1_real.yaml`. 
+- In [`./rl_policy/bfm_zero.py`](./rl_policy/bfm_zero.py), replace `"/path/to/your/unitree_sdk2/build/lib"` with the actual path to your Unitree SDK2 installation (e.g., `sys.path.append("/home/unitree/User/unitree_sdk2/build/lib")`).
 
-  (i.e. `python rl_policy/bfm_zero.py \
+- When deploying to the real robot, use the real-robot configuration file [`g1_real.yaml`](config/robot/g1_real.yaml) instead of the simulation configuration [`g1.yaml`](config/robot/g1.yaml).
+
+
+  ```python
+  python rl_policy/bfm_zero.py \
     --robot_config config/robot/g1_real.yaml \
     --policy_config ${POLICY_CONFIG} \
     --model_path ${MODEL_ONNX_PATH} \
-    --task  ${TASK}`)
-
+    --task  ${TASK}
+  ```
 ---
 
+### Known Issues
+- If you encounter an error stating that `eth0` is not a valid network interface, update the interface name in the file ['./config/robot/g1_real.yaml'](config/robot/g1_real.yaml) to match your robot’s actual network interface (e.g., `eth1`).
+
+- If you encounter severe jittering / non-stable performance on the real robot, please ensure you are using full GPU for inference and that there are no network issues, so the inference latency stays around 4–5 ms, and that your robot is type 10, 11, 12, 15, or 16 with the hip pitch motor N7520-22.5.
 
 ## 👥 Citation
 
 If you find this project useful in your research, please consider citing:
-
+<!--
 ```bibtext
 @article{li2025bfmzero,
   title   = {BFM-Zero: A Promptable Behavioral Foundation Model for Humanoid Control Using Unsupervised Reinforcement Learning},
   author  = {Yitang Li and Zhengyi Luo and Tonghe Zhang and Cunxi Dai and Anssi Kanervisto and Andrea Tirinzoni and Haoyang Weng and Kris Kitani and Mateusz Guzek and Ahmed Touati and Alessandro Lazaric and Matteo Pirotta and Guanya Shi},
   journal = {arXiv preprint arXiv:2505.06776},
   year    = {2025}
+}
+```
+-->
+
+```bibtex
+@misc{li2025bfmzeropromptablebehavioralfoundation,
+      title={BFM-Zero: A Promptable Behavioral Foundation Model for Humanoid Control Using Unsupervised Reinforcement Learning}, 
+      author={Yitang Li and Zhengyi Luo and Tonghe Zhang and Cunxi Dai and Anssi Kanervisto and Andrea Tirinzoni and Haoyang Weng and Kris Kitani and Mateusz Guzek and Ahmed Touati and Alessandro Lazaric and Matteo Pirotta and Guanya Shi},
+      year={2025},
+      eprint={2511.04131},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2511.04131}, 
 }
 ```
 
