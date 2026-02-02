@@ -15,14 +15,15 @@
 ## 关键组件与文件
 - `third_party/xing_sdk/`：拷贝 SDK，统一依赖来源。
 - `tools/xing_dump_skeleton/`：连接动捕服务器，导出骨骼 ID/名称/parentID/offset/quat 的 JSON。
-- GMR：使用 `/home/chunyu/programs/GMR`，以 `ik_configs/xrobot_to_g1.json` 做骨骼映射。
+- GMR：使用 `/home/chunyu/programs/GMR`（GMR 重定向运行在 conda 环境 `gmr`，Python 3.10），以 `ik_configs/xrobot_to_g1.json` 做骨骼映射。
 - BFM‑Zero 推理：复用 `minimal_inference` 的 z 推理逻辑与 `env.py` 观测构造。
 - 仿真执行：沿用 `deploy` 的 `sim_env` + ZMQ 低层控制通道。
+- XING SDK：原始 SDK 路径 `/home/chunyu/programs/XING_Linux_C++_SDK_4.1.0.5634`，会完整拷贝到本仓库 `third_party/xing_sdk/` 并以仓库内路径为准。
 
 ## 数据流（仿真阶段）
-1. XING SDK 读取 Skeleton 帧（mm + qx,qy,qz,qw）。
+1. XING SDK 读取 Skeleton 帧（mm + qx,qy,qz,qw），SDK 来源为 `/home/chunyu/programs/XING_Linux_C++_SDK_4.1.0.5634` 并拷贝至仓库内 `third_party/xing_sdk/` 使用。
 2. 单位换算：mm→m；四元数改为 scalar‑first（qw,qx,qy,qz）。
-3. GMR `retarget()` 输出机器人 qpos（含 root pose）。
+3. GMR `retarget()` 输出机器人 qpos（含 root pose），在 conda 环境 `gmr`（Python 3.10）中运行。
 4. 参考序列滑窗（50Hz，窗口长度与 `seq_length` 对齐）。
 5. `env.py` 生成 `next_obs` → `tracking_inference(next_obs)` → z。
 6. `policy(obs, z)` 输出动作 → 通过 deploy 的控制通道驱动仿真。
