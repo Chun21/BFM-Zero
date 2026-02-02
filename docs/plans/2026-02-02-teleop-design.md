@@ -21,8 +21,8 @@
 - XING SDK：原始 SDK 路径 `/home/chunyu/programs/XING_Linux_C++_SDK_4.1.0.5634`，会完整拷贝到本仓库 `third_party/xing_sdk/` 并以仓库内路径为准。
 
 ## 数据流（仿真阶段）
-1. XING SDK 读取 Skeleton 帧（mm + qx,qy,qz,qw），SDK 来源为 `/home/chunyu/programs/XING_Linux_C++_SDK_4.1.0.5634` 并拷贝至仓库内 `third_party/xing_sdk/` 使用。
-2. 单位换算：mm→m；四元数改为 scalar‑first（qw,qx,qy,qz）。
+1. XING SDK 读取 Skeleton 帧（mm + qx,qy,qz,qw），SDK 来源为 `/home/chunyu/programs/XING_Linux_C++_SDK_4.1.0.5634` 并拷贝至仓库内 `third_party/xing_sdk/` 使用（XING：右手系，Y‑up）。
+2. 单位换算：mm→m；四元数改为 scalar‑first（qw,qx,qy,qz）；坐标系转换到仿真/机器人坐标系（需明确 X/Z 正方向约定后固化）。
 3. GMR `retarget()` 输出机器人 qpos（含 root pose），在 conda 环境 `gmr`（Python 3.10）中运行。
 4. 参考序列滑窗（控制/推理频率 50Hz，窗口长度与 `seq_length` 对齐）。
 5. `env.py` 生成 `next_obs` → `tracking_inference(next_obs)` → z。
@@ -32,6 +32,7 @@
 - 连接失败/骨骼缺失：工具与运行时明确报错并退出非 0。
 - 帧丢失/乱序：根据时间戳做降噪与丢帧补偿；必要时保持上一帧。
 - 坐标/单位异常：在日志中标注并拒绝推理。
+- 坐标系不一致：明确 XING 为右手系、Y‑up；在转换前校验 X/Z 正方向（前/右/后）并固化转换矩阵。
 - z 推理异常：回退到上一时刻 z，避免动作突变。
 - 低层指令平滑：对关节目标应用一阶低通 `y = (1-α) * y_prev + α * x`，α=0.2。
 
