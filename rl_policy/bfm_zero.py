@@ -153,9 +153,14 @@ class BFMZeroPolicy:
         # Task-specific setup
         if self.task_type == "tracking":
             import joblib
-            logger.info(f"Loading tracking context from {exp_config['ctx_path']}")
-            ctx_path = Path(model_path).parent / exp_config['ctx_path']
-            self.ctx = joblib.load(ctx_path)
+            ctx_override = exp_config.get("ctx_override")
+            if ctx_override is not None:
+                logger.info("Using tracking context override from exp_config")
+                self.ctx = ctx_override
+            else:
+                logger.info(f"Loading tracking context from {exp_config['ctx_path']}")
+                ctx_path = Path(model_path).parent / exp_config['ctx_path']
+                self.ctx = joblib.load(ctx_path)
             
             logger.info(f"t_start={exp_config['start']}, t_end={exp_config['end']}, t_stop={exp_config['stop']}")
             self.t_start = exp_config['start']
