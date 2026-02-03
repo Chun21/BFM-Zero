@@ -4,3 +4,4 @@ __pycache__
 model/
 .worktrees/
 docs/
+unitree_sdk2/

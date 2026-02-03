@@ -12,6 +12,9 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
+# Import torch early to avoid static TLS issues on aarch64 when mujoco loads first.
+import torch  # noqa: F401
+
 from rl_policy.offline_gmr.sequence import GmrSequence
 from rl_policy.offline_gmr.reference_mujoco import ReferenceMujoco
 from rl_policy.offline_gmr.tracking_infer import TrackingInfer

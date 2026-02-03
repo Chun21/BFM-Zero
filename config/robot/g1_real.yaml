@@ -3,7 +3,7 @@ ROBOT_TYPE: 'g1_real' # Robot name, "go2", "b2", "b2w", "h1", "go2w", "g1"
 ## SIM
 DOMAIN_ID: 0 # Domain id
 # Interface
-INTERFACE: "eth0"   # "eth1"   
+INTERFACE: "wlp8s0"   # "eth1"   
 USE_JOYSTICK: True
 
 
