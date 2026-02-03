@@ -147,6 +147,7 @@ class BFMZeroPolicy:
         # Initialize variables
         self.exp_config = exp_config
         self.task_type = exp_config['type']
+        self.z_provider = exp_config.get("z_provider")
         self.start_motion = False
         logger.info(f"task_type={self.task_type}")
 
@@ -289,6 +290,20 @@ class BFMZeroPolicy:
         for update_callback in self.update_callbacks:
             update_callback(self.state_dict)
 
+    def _get_live_z(self):
+        if self.z_provider is None:
+            return None
+        try:
+            z = self.z_provider() if callable(self.z_provider) else self.z_provider.latest()
+        except TypeError:
+            if hasattr(self.z_provider, "latest"):
+                z = self.z_provider.latest()
+            else:
+                raise
+        if z is None:
+            return None
+        return np.asarray(z)
+
     def prepare_obs_for_rl(self):
         """Prepare observation for policy inference using observation classes"""
         obs_dict: Dict[str, np.ndarray] = {}
@@ -301,22 +316,26 @@ class BFMZeroPolicy:
         obs = obs_dict[obs_group.name]
 
         if self.task_type == "tracking":
-            window = self.ctx[self.t:self.t+self.window_size]  # 
-            discounts = self.gamma ** np.arange(len(window))  # [1, gamma, gamma^2, ...]
-            discounts = discounts / np.sum(discounts)    # normalize                                                                                                                                                            
-            discounted_avg = np.sum(window * discounts[:, np.newaxis], axis=0)
-            discounted_avg = discounted_avg / np.linalg.norm(discounted_avg, axis=-1) * np.linalg.norm(self.ctx[0])
+            live_z = self._get_live_z()
+            if live_z is not None:
+                discounted_avg = np.asarray(live_z, dtype=np.float32).reshape(-1)
+            else:
+                window = self.ctx[self.t:self.t+self.window_size]
+                discounts = self.gamma ** np.arange(len(window))
+                discounts = discounts / np.sum(discounts)
+                discounted_avg = np.sum(window * discounts[:, np.newaxis], axis=0)
+                discounted_avg = discounted_avg / np.linalg.norm(discounted_avg, axis=-1) * np.linalg.norm(self.ctx[0])
+                if self.use_policy_action:
+                    if self.start_motion and self.t < self.t_end:
+                        self.t += 1
+                        self.t = self.t % self.ctx.shape[0]
+                        if self.t % 100 == 0:
+                            logger.info(f"step={self.t}")
+                    else:
+                        self.t = self.t_stop
+                        self.start_motion = False
+
             inputs = np.concatenate([obs, discounted_avg[np.newaxis, :]], axis= -1).astype(np.float32)
-            
-            if self.use_policy_action:
-                if self.start_motion and self.t < self.t_end:
-                    self.t += 1
-                    self.t = self.t % self.ctx.shape[0]
-                    if self.t % 100 == 0:
-                        logger.info(f"step={self.t}")
-                else:
-                    self.t = self.t_stop
-                    self.start_motion = False
         elif self.task_type == "reward":
             try:
                 inputs = np.concatenate([obs, self.selected_z[self.z_index]], axis=-1).astype(np.float32)

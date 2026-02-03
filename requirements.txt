@@ -12,3 +12,4 @@ pygame
 zmq
 joblib
 huggingface-hub
+redis
