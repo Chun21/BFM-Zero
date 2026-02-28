@@ -1,0 +1,7 @@
+results/
+unitree_sdk2/
+__pycache__/
+.vscode/
+.workspace/
+.worktrees/
+humanoidverse/data/
